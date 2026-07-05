@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: gym-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: gymdb
+      POSTGRES_USER: ${DB_USERNAME:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+    ports:
+      - "5432:5432"
+    volumes:
+      - gym_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USERNAME:-postgres}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  app:
+    build: .
+    container_name: gym-backend
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USERNAME: ${DB_USERNAME:-postgres}
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/gymdb
+      MAIL_USERNAME: ${MAIL_USERNAME}
+      MAIL_APP_PASSWORD: ${MAIL_APP_PASSWORD}
+      TWILIO_SID: ${TWILIO_SID}
+      TWILIO_AUTH_TOKEN: ${TWILIO_AUTH_TOKEN}
+      TWILIO_FROM_NUMBER: ${TWILIO_FROM_NUMBER}
+      JWT_SECRET: ${JWT_SECRET}
+      GYM_NAME: ${GYM_NAME:-Iron Forge Gym}
+      FRONTEND_URL: ${FRONTEND_URL:-http://localhost:5173}
+      BOOTSTRAP_MANAGER_USERNAME: ${BOOTSTRAP_MANAGER_USERNAME}
+      BOOTSTRAP_MANAGER_PASSWORD: ${BOOTSTRAP_MANAGER_PASSWORD}
+      BOOTSTRAP_MANAGER_EMAIL: ${BOOTSTRAP_MANAGER_EMAIL}
+      BOOTSTRAP_MANAGER_PHONE: ${BOOTSTRAP_MANAGER_PHONE}
+      UPLOAD_DIR: /app/uploads
+    volumes:
+      - gym_uploads:/app/uploads
+
+volumes:
+  gym_postgres_data:
+  gym_uploads:

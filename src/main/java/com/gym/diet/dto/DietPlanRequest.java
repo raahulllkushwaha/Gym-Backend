@@ -1,0 +1,15 @@
+package com.gym.diet.dto;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+
+import java.util.List;
+import java.util.UUID;
+
+public record DietPlanRequest(
+        @NotNull UUID memberUserId,
+        @NotBlank String title,
+        @NotEmpty List<String> meals,
+        String notes
+) {}

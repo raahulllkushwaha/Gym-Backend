@@ -1,0 +1,65 @@
+server:
+  port: 8080
+spring:
+  application:
+    name: gym-backend
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gymdb
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:rahul5264}
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+    baseline-on-migrate: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: ${MAIL_USERNAME:rahulkushwahawindows@gmail.com}
+    password: ${MAIL_APP_PASSWORD:whmm xaow dgpy lple}
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  quartz:
+    job-store-type: memory
+    auto-startup: true
+app:
+  jwt:
+    secret: ${JWT_SECRET:896f6a81efecfb300b1a00ea92a6ae41905a02f41153bd1c6ea47aded52b3c48}
+    access-token-expiry-ms: 900000
+    refresh-token-expiry-ms: 604800000
+  frontend:
+    url: ${FRONTEND_URL:http://localhost:5173}
+  gym:
+    name: ${GYM_NAME:Iron Forge Gym}
+  twilio:
+    account-sid: ${TWILIO_SID:}
+    auth-token: ${TWILIO_AUTH_TOKEN:}
+    from-number: ${TWILIO_FROM_NUMBER:}
+  bootstrap:
+    manager-username: ${BOOTSTRAP_MANAGER_USERNAME:}
+    manager-password: ${BOOTSTRAP_MANAGER_PASSWORD:}
+    manager-email: ${BOOTSTRAP_MANAGER_EMAIL:}
+    manager-phone: ${BOOTSTRAP_MANAGER_PHONE:}
+  file:
+    upload-dir: ${UPLOAD_DIR:./uploads}
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+  api-docs:
+    path: /v3/api-docs
+logging:
+  level:
+    com.gym: DEBUG
+    org.springframework.security: INFO

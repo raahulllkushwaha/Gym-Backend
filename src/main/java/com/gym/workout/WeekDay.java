@@ -1,0 +1,5 @@
+package com.gym.workout;
+
+public enum WeekDay {
+    MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY
+}
